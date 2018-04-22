@@ -2,7 +2,6 @@ function J = derivative(M, dir)
 % M is the input metrix, dir is the direction
 % "1" means horizontal, "0" means vertical
 
-% get the length and the length of the metrix
 [height, length] = size(M);
 
 % horizontal

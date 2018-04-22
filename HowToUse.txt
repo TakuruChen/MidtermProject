@@ -1,0 +1,3 @@
+工作顺序：
+先运行WORK，之后是Knnsearch，最后是recover
+初始图片大小不宜过大，否则KNNsearch很费时间
