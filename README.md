@@ -1,14 +1,18 @@
-# MidtermProject
-progress till now
-* read.m contain the main stream of the program, including 
+# Super Resolution through NE
 
-   * reading in 
+* main process of the program, including 
+
+   * read in image 
    * transfer to yiq
-   * calculate the derivative of the metrix 
+   * calculate the derivative of the matrix 
    * get the patch
+   * find k-nearest neighbours
+   * calculate the weights and reconstruct images
 
-* derivative.m contains  the code calculate the derivative of the metrix
-
-* patchup.m patch the metrix up and make the features into four metrxi
-
-   every metrix corresponds to one type of feature
+* make.m:  read images and get features	
+* Knnsearch.m & Knn_search.m: find k-nearest neighbours
+* Recover,m:  Reconstruct images	
+* derivative.m:  calculate the derivative of the matrix
+* patchup.m:  patch the matrix up
+* getmeans.m:  calculate means of vectors in matrix
+* make_train.m:  get basic images by simple interpolation
