@@ -3,7 +3,7 @@
 load('data.mat')
 
 % Super-Resolution Image
-supername = '2.jpg';
+supername = '1.jpg';
 super_rgb = imread(supername);
 yiq_super = rgb2ntsc(super_rgb);
 super = yiq_super(:,:,1);
@@ -28,18 +28,20 @@ gap = (stride + 1)/2;
 yiq = make_train(yiq_dst);
 r = ntsc2rgb(yiq);
 Y = yiq(:,:,1);
+% consider overlap
+[tmph, tmpl] = size(Y);
+cnt = zeros(tmph, tmpl);
+M = zeros(tmph, tmpl);
 
-dsty = 1; dstx = 1;
-dstylim = hdst/2 -1; dstxlim = ldst/2 - 1;
-trainylim = htrain/2 - 1; trainxlim = ltrain/2 - 1;
+dstylim = floor((hdst - 1)/2); dstxlim = floor((ldst - 1)/2);
+trainylim = floor((htrain - 1)/2); trainxlim = floor((ltrain - 1)/2);
 num = 1;
-cnt = 0;
 [~,k] = size(neighbours);
 
 for dsty = 1:1:dstylim
     for dstx = 1:1:dstxlim
         
-        J = zeros(6, 6);
+        J = zeros(big, big);
         % calculate the weights
         X_ = dst_patch(num,:)' * ones(1, k);
         X = [];
@@ -47,13 +49,12 @@ for dsty = 1:1:dstylim
             X = [X, train_patch(neighbours(num,i), :)'];
         end
         G = (X_ - X)' * (X_ - X);
+        [gh, gl] = size(G);
+        G = G + 0.01 * ones(gh, gl);
         tmpG = inv(G) * ones(k, 1);
         w = tmpG/(ones(1, k) * tmpG);
-        % w = [1/5,1/5,1/5,1/5,1/5];
+        %w = [1/5,1/5,1/5,1/5,1/5];
         for i = 1:1:k
-            if w(i) < 0||w(i) > 1
-                cnt = cnt + 1;
-            end
             loc = neighbours(num,i);
             y = floor((loc - 1)/trainxlim) + 1;
             x = loc - (y - 1) * trainxlim;
@@ -66,9 +67,16 @@ for dsty = 1:1:dstylim
         num = num + 1;
         ydst = 4 * (dsty - 1) + 1;
         xdst = 4 * (dstx - 1) + 1;
-        Y(ydst:ydst-1+big, xdst:xdst-1+big) = Y(ydst:ydst-1+big, xdst:xdst-1+big) * 0.8 + J * 0.2;        
-        
+        M(ydst:ydst-1+big, xdst:xdst-1+big) = M(ydst:ydst-1+big, xdst:xdst-1+big) + J;        
+        cnt(ydst:ydst-1+big, xdst:xdst-1+big) = cnt(ydst:ydst-1+big, xdst:xdst-1+big) + ones(big,big);
+    end
+end
+
+for i = 1:1:tmph
+    for j = 1:1:tmpl
+        Y(i, j) = Y(i, j) * 0.9 + M(i, j)/cnt(i, j) * 0.1;
     end
 end
  res = cat(3, Y,yiq(:,:,2),yiq(:,:,3));
  res_rgb = ntsc2rgb(res);
+ imwrite(res_rgb,'test.jpg');

@@ -15,7 +15,7 @@ J = zeros(floor(iterh/(gap+1)) * floor(iterl/(gap+1)), len);
 num = 1;
 for i = gap+1:gap+1:iterh
     for j = gap+1:gap+1:iterl
-        % make the feature --> metrix into a row vector
+        % make the feature --> matrix into a row vector
         feature = reshape(M(i-gap:i+gap, j-gap:j+gap), 1, len);
         % add it to right place
         J(num, :) = feature;

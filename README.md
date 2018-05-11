@@ -16,3 +16,4 @@
 * patchup.m:  patch the matrix up
 * getmeans.m:  calculate means of vectors in matrix
 * make_train.m:  get basic images by simple interpolation
+* test.m:  to calculate PSNR

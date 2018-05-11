@@ -1,12 +1,12 @@
 % First, read in the training mage with lower resolution
-train_name = 'D:\我的内心只有它\大二春季学期\算分\code\s2.jpg';
+train_name = 't1.jpg';
 rgb_train = imread(train_name);
 yiq_train = rgb2ntsc(rgb_train);
 ytrain = yiq_train(:,:,1);
 [htrain, ltrain] = size(ytrain);
 
 % Next, read in the image to be enhanced
-dst_name = 'D:\我的内心只有它\大二春季学期\算分\code\s1.jpg';
+dst_name = 'sp.jpg';
 rgb_dst = imread(dst_name);
 yiq_dst = rgb2ntsc(rgb_dst);
 ydst = yiq_dst(:,:,1);
